@@ -1,38 +1,32 @@
-# template-windows
+# certSelf
+Windows self-signed certificate generator for client/server authentication.
+![certSelf screenshot](https://gitea.derewonko.com/audioscavenger/certSelf/blob/main/certSelf-screenshot-01.png?raw=true "certSelf screenshot")
 
-Windows template for batch scripts etc
-## :scroll: template-windows: Table of Contents
-- [template-windows](#template-windows)
-  - [:scroll: template-windows: Table of Contents](#scroll-template-windows-Table-of-Contents)
-- [template-windows: Desc1](#template-windows-Desc1)
+## :scroll: certSelf: Table of Contents
+- [certSelf](#certSelf)
+  - [:scroll: certSelf: Table of Contents](#scroll-certSelf-Table-of-Contents)
 - [Presentation](#Presentation)
   - [:sparkles: Features](#sparkles-Features)
   - [:memo: Compatibility](#memo-Compatibility)
 - [:question: How To Use](#question-How-To-Use)
-  - [Install](#Install)
 - [:clipboard: TODO List](#clipboard-TODO-List)
-- [:unamused: Thoughts](#unamused-Thoughts)
-- [:mag: Highlights](#mag-Highlights)
-  - [listFunctions](#listFunctions)
-- [:ribbon: License (is-GNU-AGPLv3)](#ribbon-License-is-GNU-AGPLv3)
-
-# template-windows: Desc1
+- [:ribbon: License (is-GNU-AGPLv3)](#ribbon-License-(is-GNU-AGPLv3))
 
 # Presentation
 
 ## :sparkles: Features
-* 100+ aliases
-> Covers common slips and uber-used commands:
-> * **ll = lla** =ls -lAq
+* offers expiration as an option
+* offers pre-build Subject line
+* adds URL support
+* uses RFC OIDs to work as client/server certificate, in both Key Usage and Extended
+
 
 ## :memo: Compatibility
-* System V
-  * SunOS
+* Windows Server
+* Windows Desktop
 
 # :question: How To Use
-
-## Install
-git clone https://gitea.derewonko.com/audioscavenger/template-windows
+Just execute it with Administrator permissions and answer the questions.
 
 # :clipboard: TODO List
 
@@ -40,25 +34,10 @@ git clone https://gitea.derewonko.com/audioscavenger/template-windows
 - [ ] Stop appending todo list
 
 * Releases
-- [x] create releases excluding opt/docs
-- [ ] create installer because of non-empty profile folder
+- [ ] Offer URL as an option
+- [ ] Export certificate.cer locally
 
-# :unamused: Thoughts
-
-# :mag: Highlights
-
-## listFunctions
-
-**listFunctions** is the usage/functions listing script you want to try first.
-
-* `listFunctions -h`
-
-  Usage: 
-  
-  ![listFunctions -h](https://www.it-cooking.com/listFunctions-help-oq10/ "listFunctions -h")
-
-
-# :ribbon: License (is GNU AGPLv3)
+# :ribbon: License GNU AGPLv3
 This project is distributed under [GNU Affero General Public License, Version 3][AGPLv3].
 
                     GNU GENERAL PUBLIC LICENSE

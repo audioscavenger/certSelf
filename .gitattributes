@@ -5,3 +5,4 @@
 CHANGELOG.md export-ignore
 CHANGELOG.cmd export-ignore
 README.cmd export-ignore
+assets/ export-ignore
