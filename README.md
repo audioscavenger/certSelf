@@ -1,6 +1,7 @@
 # certSelf
 Windows self-signed certificate generator for client/server authentication.
-![certSelf screenshot](https://gitea.derewonko.com/audioscavenger/certSelf/blob/main/certSelf-screenshot-01.png?raw=true "certSelf screenshot")
+![certSelf screenshot](https://gitea.derewonko.com/audioscavenger/certSelf/raw/branch/main/assets/certSelf-screenshot-01.png "certSelf screenshot")
+
 
 ## :scroll: certSelf: Table of Contents
 - [certSelf](#certSelf)
