@@ -1,6 +1,6 @@
 # certSelf
 Windows self-signed certificate generator for client/server authentication.
-![certSelf screenshot](https://gitea.derewonko.com/audioscavenger/certSelf/raw/branch/main/assets/certSelf-screenshot-01.png "certSelf screenshot")
+![certSelf screenshot](https://gitea.derewonko.com/audioscavenger/certSelf/raw/assets/certSelf-screenshot-01.png "certSelf screenshot")
 
 
 ## :scroll: certSelf: Table of Contents
@@ -35,6 +35,7 @@ Just execute it with Administrator permissions and answer the questions.
 - [ ] Stop appending todo list
 
 * Releases
+- [ ] Delete existing certificates or face a bug with duplicate FriendlyNames
 - [ ] Offer URL as an option
 - [ ] Export certificate.cer locally
 

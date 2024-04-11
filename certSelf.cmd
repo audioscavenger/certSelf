@@ -5,7 +5,7 @@ setlocal
 :: TODO: https://medium.com/better-programming/trusted-self-signed-certificate-and-local-domains-for-testing-7c6e6e3f9548
 
 :top
-set version=1.2.1
+set version=1.2.2
 set author=lderewonko
 
 set DEBUG=
@@ -68,21 +68,36 @@ REM Policy Mappings: 2.5.29.33
 REM Subject Alternative Name: 2.5.29.17
 
 
-powershell -Command "$params = @{FriendlyName = '%FriendlyName%'; Subject = 'CN=%FriendlyName%,OU=nQ,O=%USERDOMAIN%,DC=%USERDOMAIN%,DC=com'; TextExtension = @('2.5.29.37={text}1.3.6.1.5.5.7.3.2,1.3.6.1.5.5.7.3.1','2.5.29.17={text}DNS=*.%USERDNSDOMAIN%&DNS=%COMPUTERNAME%&IPAddress=%ipV4%&URL=https://%COMPUTERNAME%.%USERDNSDOMAIN%%PORT%/); CertStoreLocation = 'Cert:\LocalMachine\My'; NotAfter = (Get-Date).AddYears(%YEARS%); KeyAlgorithm = 'RSA'; KeyUsageProperty = 'All'; KeyUsage = @('KeyEncipherment','DataEncipherment','KeyAgreement','DigitalSignature','CertSign','CRLSign');  }; New-SelfSignedCertificate @params"
+:create-cert
+echo :create-cert
+
+powershell -Command "$params = @{FriendlyName = '%FriendlyName%'; Subject = 'CN=%FriendlyName%,OU=nQ,O=%USERDOMAIN%,DC=%USERDOMAIN%,DC=com'; TextExtension = @('2.5.29.37={text}1.3.6.1.5.5.7.3.2,1.3.6.1.5.5.7.3.1','2.5.29.17={text}DNS=*.%USERDNSDOMAIN%&DNS=%COMPUTERNAME%&IPAddress=%ipV4%&URL=https://%COMPUTERNAME%.%USERDNSDOMAIN%%PORT%/'); CertStoreLocation = 'Cert:\LocalMachine\My'; NotAfter = (Get-Date).AddYears(%YEARS%); KeyAlgorithm = 'RSA'; KeyUsageProperty = 'All'; KeyUsage = @('KeyEncipherment','DataEncipherment','KeyAgreement','DigitalSignature','CertSign','CRLSign'); }; (New-SelfSignedCertificate @params | Out-String).Trim();"
 
 :: list it: select by Subject suddenly stopped wotking on 2024-04-08
 REM powershell -Command "dir Cert:\LocalMachine\My\ | Where-Object {$_.Subject -eq 'CN=%FriendlyName%'} | ForEach-Object {    [PSCustomObject] @{        Subject = $_.Subject;        SAN = $_.DnsNameList    }}"
 
-:: list them all:
-REM powershell -Command "Get-ChildItem -Path Cert:\LocalMachine\My\ | Select ThumbPrint,FriendlyName,subject,notafter"
-powershell -Command "Get-ChildItem -Path Cert:\LocalMachine\My\ | Select ThumbPrint,FriendlyName,NotAfter,@{name='Subject Alternative Name';expression={($_.Extensions | Where-Object {$_.Oid.FriendlyName -eq 'Subject Alternative Name'}).format($true)}} | ft -wrap"
+:list-cert
+echo :list-cert
 
+powershell -Command "(Get-ChildItem -Path Cert:\LocalMachine\My\ | where-object {$_.FriendlyName -eq '%FriendlyName%'} | Select ThumbPrint,FriendlyName,Subject,NotAfter,@{name='Subject Alternative Name';expression={($_.Extensions | Where-Object {$_.Oid.FriendlyName -eq 'Subject Alternative Name'}).format($true)}} | fl | Out-String).Trim()"
+:: table alternative:
+REM powershell -Command "Get-ChildItem -Path Cert:\LocalMachine\My\ | where-object {$_.FriendlyName -eq '%FriendlyName%'} | Select ThumbPrint,FriendlyName,NotAfter,@{name='Subject Alternative Name';expression={($_.Extensions | Where-Object {$_.Oid.FriendlyName -eq 'Subject Alternative Name'}).format($true)}} | ft -wrap"
+:: shorter alternative:
+REM powershell -Command "dir Cert:\LocalMachine\My\ | Where-Object {$_.FriendlyName -eq '%FriendlyName%'}  | fl"
+
+
+:copy-CA
+echo :copy-CA
 
 :: add it to Cert:\LocalMachine\Root\: https://social.technet.microsoft.com/wiki/contents/articles/28753.powershell-trick-copy-certificates-from-one-store-to-another.aspx
 powershell -Command "$SourceStore = new-object System.Security.Cryptography.X509Certificates.X509Store([System.Security.Cryptography.X509Certificates.StoreName]::My,'LocalMachine'); $SourceStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadOnly); $DestStore = new-object System.Security.Cryptography.X509Certificates.X509Store([System.Security.Cryptography.X509Certificates.StoreName]::Root,'LocalMachine'); $DestStore.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite); $cert = $SourceStore.Certificates | Where {$_.FriendlyName -eq '%FriendlyName%'}; $DestStore.Add($cert); $SourceStore.Close(); $DestStore.Close();"
 
-:: list it in the new store:
-powershell -Command "dir Cert:\LocalMachine\Root\ | Where-Object {$_.FriendlyName -eq '%FriendlyName%'} | ForEach-Object {    [PSCustomObject] @{        Subject = $_.Subject;        SAN = $_.DnsNameList    }}"
+:list-CA
+echo :list-CA
+
+powershell -Command "(Get-ChildItem -Path Cert:\LocalMachine\Root\ | where-object {$_.FriendlyName -eq '%FriendlyName%'} | Select ThumbPrint,FriendlyName | fl | Out-String).Trim()"
+:: shorter:
+REM powershell -Command "dir Cert:\LocalMachine\Root\ | Where-Object {$_.FriendlyName -eq '%FriendlyName%'} | ForEach-Object {    [PSCustomObject] @{        Subject = $_.Subject;        SAN = $_.DnsNameList    }}"
 
 
 goto :end
